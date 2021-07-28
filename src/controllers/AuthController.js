@@ -1,7 +1,7 @@
-import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
-import dotenv from 'dotenv'
-import {User} from '../models/UserModel.js'
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+import {User} from '../models/UserModel.js';
 
 
 dotenv.config()
@@ -83,7 +83,59 @@ const AuthController = {
     },
 
     //sign in goes here
-   
+    signIn: async (req, res) => {
+        const { email, password } = req.body;
+            try{
+                if(!email || !password){
+                return res.status(400).json({
+                status: 'fail',
+                message: 'Email or password cannot be empty'
+            });
+        } 
+
+        const authUser = await User.findOne({email});
+
+            if(!authUser){
+                return res.status(400).json({
+                    status: 'Fail',
+                    message: 'User not found'
+                })
+            }
+
+        const isMatch = await bcrypt.compare(password, authUser.password);
+            delete isMatch.password;
+            if(isMatch) {
+                const payload = {
+                    id: authUser.id,
+                    email: authUser.email,
+                };
+
+        const authToken = await jwt.sign(payload, process.env.SECRET, {
+               expiresIn: 3600,
+            });
+
+            return res.status(200).json({
+               status: 'Success',
+               message: 'Success',
+               token: 'Bearer ' + authToken,
+
+           });
+       }
+
+            return res.status(400).json({
+                status: 'fail',
+                message: 'Email or password not correct'
+       })
+    } 
+
+    catch(err){
+        console.log(err);
+        res.status(500).json({
+        status:'Fail',
+        err
+    })
+}
+   }
 }
 
 

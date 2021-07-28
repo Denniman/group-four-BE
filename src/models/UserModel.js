@@ -19,7 +19,7 @@ const userSchema = new Schema (
             type: String,
             required: true,
             lowercase: true,
-            validate: [isEmail, 'Enter a valide email']
+            validate: [isEmail, 'Enter a valid email']
         },
         password: {
             type: String,
