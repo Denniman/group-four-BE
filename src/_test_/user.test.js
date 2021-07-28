@@ -26,6 +26,20 @@ describe('POST /api', () => {
         expect(response.status).toBe(400)
         expect(response.body.message).toBe('All fields must be provided')
     })
+<<<<<<< HEAD
+=======
+    it('should specify json in the content type header', async () => {
+        const response = await request.post('/api/register')
+        .send({email: 'testdev@dev.com', password: '1234567'})
+        expect(response.headers['content-type']).toEqual(expect.stringContaining('json'))
+    })
+    it('checks for a valid email address', async () => {
+        const response = await request.post('/api/register')
+        .send({email: 'testdev@dev.com', password: '1234567'})
+    })
+})
+
+>>>>>>> 6e74a1394b57ccb3c39ab04e54f080c21fc4cd48
 
     it('', async () => {
         const response = await request.post('/api/login')
@@ -35,8 +49,13 @@ describe('POST /api', () => {
         expect(response.body.message).toBe('Email or password cannot be empty')
     })
 
+<<<<<<< HEAD
     afterAll(async () => {
         await mongo.disconnect();
         await mongoose.connection.close();
     });
 });
+=======
+
+
+>>>>>>> 6e74a1394b57ccb3c39ab04e54f080c21fc4cd48
