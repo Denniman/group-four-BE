@@ -1,23 +1,20 @@
 import express from 'express';
 import cors from 'cors';
+import morgan from 'morgan';
 
-import userRoute from './routes/userRoute.js'
+import apiRoutes from './routes/index.js';
 
-const app = express()
-
+const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true}));
-
+app.use(morgan('dev'));
+app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
-    res.json({message: 'server is ready'});
-})
+  res.json({ message: 'server is ready' });
+});
 
-
-// routes 
-app.use('/api', userRoute)
-
-
+// routes
+app.use('/', apiRoutes);
 export default app;

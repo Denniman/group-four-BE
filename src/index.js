@@ -8,6 +8,7 @@ databaseConnection.getConnect()
 
 
 
-app.listen(port, () => {
+export const server = app.listen(port, () => {
     console.log(`Server listening on http://localhost:${port}`);
 });
+
