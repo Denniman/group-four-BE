@@ -5,15 +5,14 @@ import {User} from '../models/UserModel.js'
 import validatePassword from '../utils/validatePassword.js'
 import emailValidation from '../utils/validateEmail.js'
 
-
 dotenv.config()
 
 const AuthController = {
     signup: async (req, res) => {
-        const {name, email, password} = req.body 
+        const {name, email, password, confirmPassword} = req.body; 
 
         try {
-            if(!name || !email || !password) {
+            if(!name || !email || !password || !confirmPassword) {
                 return res
                 .status(400)
                 .json({message: 'All fields must be provided'})
@@ -32,6 +31,10 @@ const AuthController = {
                 return res.status(400).json({message: 'Password must be alphanumeric characters'})
             }
 
+            if(confirmPassword !== password){
+                return res.status(400).json({message: 'Confirm Password'})
+            }
+
             const findUser = await User.findOne({email})
 
             if(findUser) {
@@ -43,13 +46,13 @@ const AuthController = {
 
 
             if (hash) {
-                const newUser = new User({ name, email, password: hash})
+                const newUser = new User({ name, email, password: hash, confirmPassword: hash})
                 const savedUser = await newUser.save()
      
                 if (savedUser) {
                     jwt.sign(
                     {id: savedUser._id},
-                    process.env.SECRET,
+                    `${process.env.SECRET}`,
                         {expiresIn: 3600},
                         (err, token) => {
                             if (err) {

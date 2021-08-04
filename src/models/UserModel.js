@@ -15,9 +15,13 @@ const userSchema = new Schema (
             type: String,
             required: true,
             lowercase: true,
-            validate: [isEmail, 'Enter a valide email']
+            validate: [isEmail, 'Enter a valid email']
         },
         password: {
+            type: String,
+            required: true
+        },
+        confirmPassword: {
             type: String,
             required: true
         }
@@ -26,3 +30,11 @@ const userSchema = new Schema (
 )
 
 export const User = model('user', userSchema)
+
+// const person = new User ({
+//     name: 'Deji',
+//     email: 'dejiomoloja@gmail.com',
+//     password: 'food'
+// });
+
+// person.save();
