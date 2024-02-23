@@ -86,13 +86,13 @@ export const getDish = async (req, res) => {
 };
 
 export const getDishesByQuery = async (req, res) => {
+
   try {
     const getMultipleDishes = await Dishes.find(req.query).lean().exec();
 
     res.statusCode = 200;
     res.send({
       data: getMultipleDishes,
-      getReviews,
       status: 'success',
     });
   } catch (err) {
