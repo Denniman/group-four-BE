@@ -3,7 +3,7 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-const db = `mongodb+srv://${process.env.DATABASE_USER}:${process.env.DATABASE_PASSWORD}@signin.uwsar.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
+const db = process.env.MONGO_URL
 
 
 const databaseConnection = {

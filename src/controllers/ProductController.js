@@ -86,17 +86,41 @@ export const getDish = async (req, res) => {
 };
 
 export const getDishesByQuery = async (req, res) => {
+
   try {
-    const getMultipleDishes = await Dishes.find(req.query).lean().exec();
+    const searchTerm = req.query.searchTerm || '';
+    const category = req.query.category || '';
+    const featured = req.query.featured;
+    const query = {
+      $or: [
+        { name: { $regex: searchTerm, $options: 'i' } },
+        { label: { $regex: searchTerm, $options: 'i' } },
+      ],
+    };
+
+    if (!isNaN(parseFloat(searchTerm)) && searchTerm.trim() !== '') {
+      query.$or.push({ price: parseFloat(searchTerm) });
+    }
+
+    if (featured !== undefined) {
+      query.featured = featured === 'true';
+    }
+
+    if (category) {
+      query.category = category;
+    }
+
+    const getMultipleDishes = await Dishes.find(query).lean().exec();
 
     res.statusCode = 200;
     res.send({
       data: getMultipleDishes,
-      getReviews,
       status: 'success',
     });
+
   } catch (err) {
-    console.log(err);
+    console.log(err.message);
+    res.status(400).send({ message: 'inavlid  request' });
   }
 };
 
